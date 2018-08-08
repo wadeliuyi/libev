@@ -3531,8 +3531,9 @@ time_update (EV_P_ ev_tstamp max_block)
     }
 }
 
+/*EV_A is loop, EV_A_ is loop,*/
 int
-ev_run (EV_P_ int flags)
+ev_run (struct ev_loop *loop, int flags)
 {
 #if EV_FEATURE_API
   ++loop_depth;
@@ -3910,10 +3911,10 @@ ev_timer_stop (EV_P_ ev_timer *w) EV_THROW
 
     --timercnt;
 
-    if (expect_true (active < timercnt + HEAP0))
+    if (expect_true (active < timercnt + HEAP0)) // 当前要删除的定时器小于loop中最大index
       {
-        timers [active] = timers [timercnt + HEAP0];
-        adjustheap (timers, timercnt, active);
+        timers [active] = timers [timercnt + HEAP0]; //将最后一个定时器拷贝到待删除的位置
+        adjustheap (timers, timercnt, active); //调整堆
       }
   }
 

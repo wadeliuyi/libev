@@ -326,7 +326,12 @@ typedef struct ev_io
 /* revent EV_TIMEOUT */
 typedef struct ev_timer
 {
-  EV_WATCHER_TIME (ev_timer)
+  //EV_WATCHER_TIME (ev_timer)
+  int active;   // 放入loop队列中后的index
+  int pending;  //放入pending队列后的index
+  int priority;  //EV_DECL_PRIORITY
+  void *data;   //EV_COMMON
+  void (*cb)(struct ev_loop *loop, struct ev_timer *w, int revents);    
 
   ev_tstamp repeat; /* rw */
 } ev_timer;
