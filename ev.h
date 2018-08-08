@@ -150,7 +150,7 @@ EV_CPP(extern "C" {)
 
 /*****************************************************************************/
 
-typedef double ev_tstamp;
+
 
 #include <string.h> /* for memmove */
 
@@ -278,6 +278,8 @@ enum {
 # define EV_DECL_PRIORITY int priority;
 #endif
 
+typedef double ev_tstamp;
+
 /* shared by all watchers */
 #define EV_WATCHER(type)			\
   int active; /* private */			\
@@ -316,7 +318,12 @@ typedef struct ev_watcher_time
 /* revent EV_READ, EV_WRITE */
 typedef struct ev_io
 {
-  EV_WATCHER_LIST (ev_io)
+  //EV_WATCHER_LIST (ev_io)
+  int active;   // 放入loop队列中后的index
+  int pending;  //放入pending队列后的index
+  int priority;  //EV_DECL_PRIORITY
+  void *data;   //EV_COMMON
+  struct ev_watcher_list *next; /* private */
 
   int fd;     /* ro */
   int events; /* ro */

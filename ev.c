@@ -3322,7 +3322,7 @@ timers_reify (EV_P)
 {
   EV_FREQUENT_CHECK;
 
-  if (timercnt && ANHE_at (timers [HEAP0]) < mn_now)
+  if (timercnt && ANHE_at (timers [HEAP0]) < mn_now) //堆顶小于当前时间，说明超时器已经过了，需要调度超时器
     {
       do
         {
@@ -3340,17 +3340,17 @@ timers_reify (EV_P)
               assert (("libev: negative ev_timer repeat value found while processing timers", w->repeat > 0.));
 
               ANHE_at_cache (timers [HEAP0]);
-              downheap (timers, timercnt, HEAP0);
+              downheap (timers, timercnt, HEAP0); //向下调整堆
             }
           else
             ev_timer_stop (EV_A_ w); /* nonrepeating: stop timer */
 
           EV_FREQUENT_CHECK;
-          feed_reverse (EV_A_ (W)w);
+          feed_reverse (EV_A_ (W)w); //加入feed队列
         }
       while (timercnt && ANHE_at (timers [HEAP0]) < mn_now);
 
-      feed_reverse_done (EV_A_ EV_TIMER);
+      feed_reverse_done (EV_A_ EV_TIMER); //将feed队列加入pending队列中
     }
 }
 
@@ -3652,7 +3652,7 @@ ev_run (struct ev_loop *loop, int flags)
         ++loop_count;
 #endif
         assert ((loop_done = EVBREAK_RECURSE, 1)); /* assert for side effect */
-        backend_poll (EV_A_ waittime);
+        backend_poll (EV_A_ waittime); //epoll_poll
         assert ((loop_done = EVBREAK_CANCEL, 1)); /* assert for side effect */
 
         pipe_write_wanted = 0; /* just an optimisation, no fence needed */
@@ -3670,7 +3670,7 @@ ev_run (struct ev_loop *loop, int flags)
       }
 
       /* queue pending timers and reschedule them */
-      timers_reify (EV_A); /* relative timers called last */
+      timers_reify (EV_A); /* relative timers called last 调度定时器*/
 #if EV_PERIODIC_ENABLE
       periodics_reify (EV_A); /* absolute timers called first */
 #endif
